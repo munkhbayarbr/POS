@@ -8,16 +8,41 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using PosLibrary.Data;
 using PosLibrary.Models;
 namespace POSUI;
 
 public partial class MainForm : Form
 {
-    private readonly User _currentUser;
+   
+        private User _currentUser;
+
     public MainForm(User user)
     {
         InitializeComponent();
         _currentUser = user;
-        btn.Text = _currentUser.Username;
+
+     
+        mnuCategories.Visible = user.Role == "Manager";
+        btnEdit.Enabled = btnDelete.Enabled = user.Role == "Manager";
+
+
+        var products = new Context().Products.ToList();
+        dProducts.DataSource = products;
+    }
+
+    private void btnAdd_Click(object sender, EventArgs e)
+
+    }
+
+    private void btnEdit_Click(object sender, EventArgs e)
+    {
+
+    }
+
+    private void btnDelete_Click(object sender, EventArgs e)
+    {
+        
     }
 }
+
