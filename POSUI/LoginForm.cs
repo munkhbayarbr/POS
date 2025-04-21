@@ -1,45 +1,44 @@
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using PosLibrary.Data;
+using PosLibrary.Models;
+using PosLibrary.Repositories;
+namespace POSUI;
 
-namespace POSUI
+public partial class LoginForm : Form
 {
-    public partial class LoginForm : Form
+    private readonly UserRepository _userRepo;
+    public LoginForm()
     {
-        private readonly DbContextOptions<Context> _options;
+        InitializeComponent();
+        _userRepo = new UserRepository();
 
-        public LoginForm(DbContextOptions<Context> options)
+    }
+    private void Login(object sender, EventArgs e)
+    {
+        var username = txtUsername.Text.Trim();
+        var password = txtPassword.Text; 
+
+        User? user = _userRepo.ValidateUser(username, password);
+
+        if (user != null)
         {
-            InitializeComponent();
-            _options = options;
+            MessageBox.Show($"Тавтай морил, {user.Username}!",
+                           "Амжилттай нэвтэрлээ",
+                           MessageBoxButtons.OK,
+                           MessageBoxIcon.Information);
+            Hide();
+            using var main = new MainForm(user);
+            main.ShowDialog();
+            Close();
         }
-        private void btnLogin_Click(object sender, EventArgs e)
+        else
         {
-            var username = txtUsername.Text.Trim();
-            var password = txtPassword.Text; 
-
-            using var db = new Context(_options);
-            var user = db.Users
-                         .AsNoTracking()
-                         .SingleOrDefault(u => u.Username == username && u.Password == password);
-
-            if (user != null)
-            {
-                
-                Hide();
-                
-                using var main = new MainForm();
-                main.ShowDialog();
-                Close();
-            }
-            else
-            {
-                MessageBox.Show(
-                    "Invalid username or password.",
-                    "Login Failed",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Error
-                );
-            }
+            MessageBox.Show(
+                "Нэвтрэх нэр эсвэл нууц үг буруу байна.",
+                "Login Failed",
+                MessageBoxButtons.OK,
+                MessageBoxIcon.Error
+            );
         }
     }
 }

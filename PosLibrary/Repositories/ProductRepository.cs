@@ -4,8 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PosLibrary;
+namespace PosLibrary.Repositories;
 
-internal class dbHelper
+class ProductRepository
 {
 }

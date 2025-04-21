@@ -57,7 +57,7 @@
             button1.TabIndex = 2;
             button1.Text = "nevtrelh";
             button1.UseVisualStyleBackColor = true;
-            button1.Click += btnLogin_Click;
+            button1.Click += Login;
             // 
             // LoginForm
             // 
