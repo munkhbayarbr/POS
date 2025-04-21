@@ -1,3 +1,7 @@
+using Microsoft.EntityFrameworkCore;
+using PosLibrary.Data;
+using System;
+
 namespace POSUI
 {
     internal static class Program
@@ -8,10 +12,16 @@ namespace POSUI
         [STAThread]
         static void Main()
         {
-            // To customize application configuration such as set high DPI settings or default font,
-            // see https://aka.ms/applicationconfiguration.
+            var optionsBuilder = new DbContextOptionsBuilder<Context>();
+            optionsBuilder.UseSqlite($"Data Source={Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData)}/pos.db");
+
+            // Ensure DB + seed applied
+            using (var db = new Context(optionsBuilder.Options))
+                db.Database.Migrate();
+
             ApplicationConfiguration.Initialize();
-            Application.Run(new Form1());
+            Application.Run(new LoginForm(optionsBuilder.Options));
+
         }
     }
 }
