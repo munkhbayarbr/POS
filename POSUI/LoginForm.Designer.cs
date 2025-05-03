@@ -55,7 +55,7 @@
             button1.Name = "button1";
             button1.Size = new Size(75, 23);
             button1.TabIndex = 2;
-            button1.Text = "nevtrelh";
+            button1.Text = "нэвтрэх";
             button1.UseVisualStyleBackColor = true;
             button1.Click += Login;
             // 
@@ -68,7 +68,7 @@
             Controls.Add(txtPassword);
             Controls.Add(txtUsername);
             Name = "LoginForm";
-            Text = "Form1";
+            Text = "е";
             ResumeLayout(false);
             PerformLayout();
         }

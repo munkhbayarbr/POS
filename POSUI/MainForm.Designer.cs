@@ -9,18 +9,6 @@ namespace POSUI
         /// Required designer variable.
         /// </summary>
         private System.ComponentModel.IContainer components = null;
-
-        /// <summary>
-        /// Clean up any resources being used.
-        /// </summary>
-        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
-        ///  private IContainer components = null;
-        private MenuStrip menuStrip;
-        private ToolStripMenuItem mnuProducts, mnuCategories, mnuHelp;
-        private StatusStrip statusStrip1;
-        private DataGridView dProducts;
-        private FlowLayoutPanel flowLayoutPanel1;
-        private Button btnAdd, btnEdit, btnDelete;
       
       
         protected override void Dispose(bool disposing)
@@ -40,117 +28,122 @@ namespace POSUI
         /// </summary>
         private void InitializeComponent()
         {
-            menuStrip = new MenuStrip();
-            mnuProducts = new ToolStripMenuItem();
-            mnuCategories = new ToolStripMenuItem();
-            mnuHelp = new ToolStripMenuItem();
-            statusStrip1 = new StatusStrip();
-            dProducts = new DataGridView();
-            flowLayoutPanel1 = new FlowLayoutPanel();
-            btnAdd = new Button();
-            btnEdit = new Button();
-            btnDelete = new Button();
-            menuStrip.SuspendLayout();
-            ((ISupportInitialize)dProducts).BeginInit();
-            flowLayoutPanel1.SuspendLayout();
+            tableLayoutPanel1 = new TableLayoutPanel();
+            gridCart = new DataGridView();
+            tableLayoutPanel2 = new TableLayoutPanel();
+            panel1 = new Panel();
+            button1 = new Button();
+            textBox1 = new TextBox();
+            flowProducts = new FlowLayoutPanel();
+            tableLayoutPanel1.SuspendLayout();
+            ((ISupportInitialize)gridCart).BeginInit();
+            tableLayoutPanel2.SuspendLayout();
+            panel1.SuspendLayout();
             SuspendLayout();
             // 
-            // menuStrip
+            // tableLayoutPanel1
             // 
-            menuStrip.Items.AddRange(new ToolStripItem[] { mnuProducts, mnuCategories, mnuHelp });
-            menuStrip.Location = new Point(0, 0);
-            menuStrip.Name = "menuStrip";
-            menuStrip.Size = new Size(990, 24);
-            menuStrip.TabIndex = 3;
+            tableLayoutPanel1.ColumnCount = 3;
+            tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 60F));
+            tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 400F));
+            tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 100F));
+            tableLayoutPanel1.Controls.Add(gridCart, 1, 0);
+            tableLayoutPanel1.Controls.Add(tableLayoutPanel2, 2, 0);
+            tableLayoutPanel1.Dock = DockStyle.Fill;
+            tableLayoutPanel1.Location = new Point(0, 0);
+            tableLayoutPanel1.Name = "tableLayoutPanel1";
+            tableLayoutPanel1.RowCount = 2;
+            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 100F));
+            tableLayoutPanel1.Size = new Size(990, 475);
+            tableLayoutPanel1.TabIndex = 0;
             // 
-            // mnuProducts
+            // gridCart
             // 
-            mnuProducts.Name = "mnuProducts";
-            mnuProducts.Size = new Size(51, 20);
-            mnuProducts.Text = "Бараа";
+            gridCart.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            gridCart.Dock = DockStyle.Fill;
+            gridCart.Location = new Point(63, 3);
+            gridCart.Name = "gridCart";
+            gridCart.Size = new Size(394, 369);
+            gridCart.TabIndex = 1;
             // 
-            // mnuCategories
+            // tableLayoutPanel2
             // 
-            mnuCategories.Name = "mnuCategories";
-            mnuCategories.Size = new Size(115, 20);
-            mnuCategories.Text = "Барааны ангилал";
+            tableLayoutPanel2.ColumnCount = 1;
+            tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+            tableLayoutPanel2.Controls.Add(panel1, 0, 0);
+            tableLayoutPanel2.Controls.Add(flowProducts, 0, 1);
+            tableLayoutPanel2.Dock = DockStyle.Fill;
+            tableLayoutPanel2.Location = new Point(463, 3);
+            tableLayoutPanel2.Name = "tableLayoutPanel2";
+            tableLayoutPanel2.RowCount = 3;
+            tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Absolute, 40F));
+            tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+            tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Absolute, 120F));
+            tableLayoutPanel2.Size = new Size(524, 369);
+            tableLayoutPanel2.TabIndex = 0;
             // 
-            // mnuHelp
+            // panel1
             // 
-            mnuHelp.Name = "mnuHelp";
-            mnuHelp.Size = new Size(68, 20);
-            mnuHelp.Text = "Тусламж";
+            panel1.Controls.Add(button1);
+            panel1.Controls.Add(textBox1);
+            panel1.Dock = DockStyle.Fill;
+            panel1.Location = new Point(3, 3);
+            panel1.Name = "panel1";
+            panel1.Size = new Size(518, 34);
+            panel1.TabIndex = 0;
             // 
-            // statusStrip1
+            // button1
             // 
-            statusStrip1.Location = new Point(0, 453);
-            statusStrip1.Name = "statusStrip1";
-            statusStrip1.Size = new Size(990, 22);
-            statusStrip1.TabIndex = 2;
+            button1.Dock = DockStyle.Right;
+            button1.Location = new Point(488, 0);
+            button1.Name = "button1";
+            button1.Size = new Size(30, 34);
+            button1.TabIndex = 1;
+            button1.Text = "🔍";
+            button1.UseVisualStyleBackColor = true;
             // 
-            // dProducts
+            // textBox1
             // 
-            dProducts.Dock = DockStyle.Right;
-            dProducts.Location = new Point(411, 24);
-            dProducts.Name = "dProducts";
-            dProducts.Size = new Size(579, 429);
-            dProducts.TabIndex = 0;
+            textBox1.Dock = DockStyle.Fill;
+            textBox1.Location = new Point(0, 0);
+            textBox1.Margin = new Padding(0);
+            textBox1.Name = "textBox1";
+            textBox1.Size = new Size(518, 23);
+            textBox1.TabIndex = 0;
             // 
-            // flowLayoutPanel1
+            // flowProducts
             // 
-            flowLayoutPanel1.Controls.Add(btnAdd);
-            flowLayoutPanel1.Controls.Add(btnEdit);
-            flowLayoutPanel1.Controls.Add(btnDelete);
-            flowLayoutPanel1.Dock = DockStyle.Left;
-            flowLayoutPanel1.Location = new Point(0, 24);
-            flowLayoutPanel1.Name = "flowLayoutPanel1";
-            flowLayoutPanel1.Size = new Size(411, 429);
-            flowLayoutPanel1.TabIndex = 1;
-            // 
-            // btnAdd
-            // 
-            btnAdd.Location = new Point(3, 3);
-            btnAdd.Name = "btnAdd";
-            btnAdd.Size = new Size(75, 23);
-            btnAdd.TabIndex = 0;
-            btnAdd.Click += btnAdd_Click;
-            // 
-            // btnEdit
-            // 
-            btnEdit.Location = new Point(84, 3);
-            btnEdit.Name = "btnEdit";
-            btnEdit.Size = new Size(75, 23);
-            btnEdit.TabIndex = 1;
-            btnEdit.Click += btnEdit_Click;
-            // 
-            // btnDelete
-            // 
-            btnDelete.Location = new Point(165, 3);
-            btnDelete.Name = "btnDelete";
-            btnDelete.Size = new Size(75, 23);
-            btnDelete.TabIndex = 2;
-            btnDelete.Click += btnDelete_Click;
+            flowProducts.AutoScroll = true;
+            flowProducts.Dock = DockStyle.Fill;
+            flowProducts.Location = new Point(3, 43);
+            flowProducts.Name = "flowProducts";
+            flowProducts.Size = new Size(518, 203);
+            flowProducts.TabIndex = 1;
             // 
             // MainForm
             // 
             ClientSize = new Size(990, 475);
-            Controls.Add(dProducts);
-            Controls.Add(flowLayoutPanel1);
-            Controls.Add(statusStrip1);
-            Controls.Add(menuStrip);
-            MainMenuStrip = menuStrip;
+            Controls.Add(tableLayoutPanel1);
             Name = "MainForm";
             Text = "MainForm";
             WindowState = FormWindowState.Maximized;
-            menuStrip.ResumeLayout(false);
-            menuStrip.PerformLayout();
-            ((ISupportInitialize)dProducts).EndInit();
-            flowLayoutPanel1.ResumeLayout(false);
+            tableLayoutPanel1.ResumeLayout(false);
+            ((ISupportInitialize)gridCart).EndInit();
+            tableLayoutPanel2.ResumeLayout(false);
+            panel1.ResumeLayout(false);
+            panel1.PerformLayout();
             ResumeLayout(false);
-            PerformLayout();
         }
         #endregion
 
 
+        private TableLayoutPanel tableLayoutPanel1;
+        private TableLayoutPanel tableLayoutPanel2;
+        private Panel panel1;
+        private Button button1;
+        private TextBox textBox1;
+        private FlowLayoutPanel flowProducts;
+        private DataGridView gridCart;
     }
 }
