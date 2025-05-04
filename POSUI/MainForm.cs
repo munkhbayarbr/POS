@@ -1,13 +1,17 @@
 ﻿using PosLibrary.Data;
 using PosLibrary.Models;
+using PosLibrary.Repositories;
 namespace POSUI;
 public partial class MainForm : Form
 {
     private readonly User _currentUser;
+    private readonly ProductRepository _productRepo;
 
     public MainForm(User user)
     {
         InitializeComponent();
+        _productRepo = new ProductRepository();
+         timer.Start();
         _currentUser = user;
         gridCart.AutoGenerateColumns = false;
         gridCart.Columns.Add(new DataGridViewTextBoxColumn
@@ -22,8 +26,7 @@ public partial class MainForm : Form
             HeaderText = "Qty",
             DataPropertyName = "Quantity"
         });
-        // … U/Price, Dis%, Total …
-        // Then Add Edit/Delete buttons if you like:
+       
         gridCart.Columns.Add(new DataGridViewButtonColumn
         {
             Name = "Edit",
@@ -38,12 +41,13 @@ public partial class MainForm : Form
         });
 
         LoadProducts();
+
     }
 
     private void LoadProducts()
     {
 
-        var productList = new Context().Products.ToList();
+        var productList = _productRepo.GetProducts();
 
         flowProducts.Controls.Clear();
 
@@ -61,7 +65,7 @@ public partial class MainForm : Form
 
             var pic = new PictureBox
             {
-                Image = Image.FromFile(@"C:\Users\muba\Downloads\goods.png"),
+                Image = Image.FromFile(@"C:\Users\munkh\Source\Repos\POS\POSUI\shop.png"),
                 SizeMode = PictureBoxSizeMode.Zoom,
                 Dock = DockStyle.Top,
                 Height = 80
@@ -87,6 +91,18 @@ public partial class MainForm : Form
     {
 
     }
+    private void timer_run(object sender, EventArgs e)
+    {
+        timeArea.Text = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+    }
+    private void ShowProfile(object sender, EventArgs e)
+    {
+        Hide();
+        using var profile = new Profile(_currentUser);
+        profile.ShowDialog();
+        Show();
+    }
 
-   
+ 
 }
+    

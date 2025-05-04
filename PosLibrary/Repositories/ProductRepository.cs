@@ -1,11 +1,15 @@
-﻿using System;
+﻿using PosLibrary.Data;
+using PosLibrary.Models;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PosLibrary.Repositories;
 
-class ProductRepository
+public class ProductRepository
 {
+    public List<Product> GetProducts()
+    {
+        using var db = new Context();
+        return db.Products.ToList();
+    }
 }
