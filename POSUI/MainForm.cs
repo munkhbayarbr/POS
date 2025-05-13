@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
+using PosLibrary.Data;
 using PosLibrary.Models;
-using PosLibrary.Repositories;
+using PosLibrary.Repositories.RepositoryImp;
 
 namespace POSUI
 {
-    public partial class MainForm : Form
+    public partial class MainForm: Form
     {
         private readonly User _currentUser;
         private readonly ProductRepository _productRepo;
@@ -24,6 +25,7 @@ namespace POSUI
             InitializeComponent();
 
             _currentUser = user;
+
             _productRepo = new ProductRepository();
             _categoryRepo = new CategoryRepository();
 
@@ -121,13 +123,13 @@ namespace POSUI
                     BorderStyle = BorderStyle.FixedSingle,
                     Cursor = Cursors.Hand
                 };
-                var pic = new PictureBox
-                {
-                    Image = Image.FromFile(@"C:\Users\muba\Desktop\RESULT\POSUI\shop.png"),
-                    SizeMode = PictureBoxSizeMode.Zoom,
-                    Dock = DockStyle.Top,
-                    Height = 80
-                };
+                //var pic = new PictureBox
+                //{
+                //    Image = Image.FromFile("images/shop.png"),
+                //    SizeMode = PictureBoxSizeMode.Zoom,
+                //    Dock = DockStyle.Top,
+                //    Height = 80
+                //};
                 var lbl = new Label
                 {
                     Text = $"{prod.Name}\n${prod.Price:F2}\n{prod.Code}",
@@ -137,7 +139,7 @@ namespace POSUI
                 };
 
                 card.Controls.Add(lbl);
-                card.Controls.Add(pic);
+                //card.Controls.Add(pic);
                 card.Click += (s, e) => AddToCart(prod);
 
                 flowProducts.Controls.Add(card);

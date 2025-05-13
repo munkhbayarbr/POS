@@ -29,6 +29,7 @@ partial class MainForm
     private void InitializeComponent()
     {
         components = new Container();
+        ComponentResourceManager resources = new ComponentResourceManager(typeof(MainForm));
         tableLayoutPanel1 = new TableLayoutPanel();
         gridCart = new DataGridView();
         flows = new TableLayoutPanel();
@@ -194,7 +195,7 @@ partial class MainForm
         // 
         pictureBox1.Cursor = Cursors.Hand;
         pictureBox1.Dock = DockStyle.Right;
-        pictureBox1.Image = Properties.Resources.profile;
+        pictureBox1.Image = (Image)resources.GetObject("pictureBox1.Image");
         pictureBox1.Location = new Point(556, 0);
         pictureBox1.Margin = new Padding(3, 3, 10, 3);
         pictureBox1.Name = "pictureBox1";
@@ -214,24 +215,24 @@ partial class MainForm
         // 
         MenuStrip.Items.AddRange(new ToolStripItem[] { profileToolStripMenuItem, ангилалToolStripMenuItem, тусламжToolStripMenuItem });
         MenuStrip.Name = "Цэс";
-        MenuStrip.Size = new Size(125, 70);
+        MenuStrip.Size = new Size(124, 70);
         // 
         // profileToolStripMenuItem
         // 
         profileToolStripMenuItem.Name = "profileToolStripMenuItem";
-        profileToolStripMenuItem.Size = new Size(124, 22);
+        profileToolStripMenuItem.Size = new Size(123, 22);
         profileToolStripMenuItem.Text = "Бараа";
         // 
         // ангилалToolStripMenuItem
         // 
         ангилалToolStripMenuItem.Name = "ангилалToolStripMenuItem";
-        ангилалToolStripMenuItem.Size = new Size(124, 22);
+        ангилалToolStripMenuItem.Size = new Size(123, 22);
         ангилалToolStripMenuItem.Text = "Ангилал";
         // 
         // тусламжToolStripMenuItem
         // 
         тусламжToolStripMenuItem.Name = "тусламжToolStripMenuItem";
-        тусламжToolStripMenuItem.Size = new Size(124, 22);
+        тусламжToolStripMenuItem.Size = new Size(123, 22);
         тусламжToolStripMenuItem.Text = "Тусламж";
         // 
         // MainForm

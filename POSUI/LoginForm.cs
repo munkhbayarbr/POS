@@ -1,24 +1,26 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PosLibrary.Data;
 using PosLibrary.Models;
-using PosLibrary.Repositories;
+using PosLibrary.Repositories.RepositoryImp;
 namespace POSUI;
 
-public partial class LoginForm : Form
+public partial class LoginForm : BaseForm
 {
     private readonly UserRepository _userRepo;
+
     public LoginForm()
     {
         InitializeComponent();
+
         _userRepo = new UserRepository();
 
     }
-    private void Login(object sender, EventArgs e)
+    private async void Login(object sender, EventArgs e)
     {
         var username = txtUsername.Text.Trim();
-        var password = txtPassword.Text; 
+        var password = txtPassword.Text;
 
-        User? user = _userRepo.ValidateUser(username, password);
+        User? user = await _userRepo.ValidateUser(username, password);
 
         if (user != null)
         {
@@ -41,4 +43,6 @@ public partial class LoginForm : Form
             );
         }
     }
+
+  
 }

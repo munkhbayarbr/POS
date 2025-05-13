@@ -28,55 +28,68 @@
         /// </summary>
         private void InitializeComponent()
         {
-            txtUsername = new TextBox();
-            txtPassword = new TextBox();
+            panel1 = new Panel();
             button1 = new Button();
+            txtPassword = new TextBox();
+            txtUsername = new TextBox();
+            panel1.SuspendLayout();
             SuspendLayout();
             // 
-            // txtUsername
+            // panel1
             // 
-            txtUsername.Location = new Point(290, 186);
-            txtUsername.Name = "txtUsername";
-            txtUsername.PlaceholderText = "username";
-            txtUsername.Size = new Size(155, 23);
-            txtUsername.TabIndex = 0;
-            // 
-            // txtPassword
-            // 
-            txtPassword.Location = new Point(290, 215);
-            txtPassword.Name = "txtPassword";
-            txtPassword.PlaceholderText = "Password";
-            txtPassword.Size = new Size(155, 23);
-            txtPassword.TabIndex = 1;
+            panel1.Controls.Add(button1);
+            panel1.Controls.Add(txtPassword);
+            panel1.Controls.Add(txtUsername);
+            panel1.Dock = DockStyle.Fill;
+            panel1.Location = new Point(0, 0);
+            panel1.Name = "panel1";
+            panel1.Size = new Size(1510, 918);
+            panel1.TabIndex = 0;
             // 
             // button1
             // 
-            button1.Location = new Point(336, 271);
+            button1.Location = new Point(724, 490);
             button1.Name = "button1";
-            button1.Size = new Size(75, 23);
-            button1.TabIndex = 2;
+            button1.Size = new Size(64, 23);
+            button1.TabIndex = 5;
             button1.Text = "нэвтрэх";
             button1.UseVisualStyleBackColor = true;
             button1.Click += Login;
+            // 
+            // txtPassword
+            // 
+            txtPassword.Location = new Point(678, 434);
+            txtPassword.Name = "txtPassword";
+            txtPassword.PlaceholderText = "Password";
+            txtPassword.Size = new Size(155, 23);
+            txtPassword.TabIndex = 4;
+            // 
+            // txtUsername
+            // 
+            txtUsername.Location = new Point(678, 405);
+            txtUsername.Name = "txtUsername";
+            txtUsername.PlaceholderText = "username";
+            txtUsername.Size = new Size(155, 23);
+            txtUsername.TabIndex = 3;
             // 
             // LoginForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(800, 450);
-            Controls.Add(button1);
-            Controls.Add(txtPassword);
-            Controls.Add(txtUsername);
+            ClientSize = new Size(1510, 918);
+            Controls.Add(panel1);
             Name = "LoginForm";
-            Text = "е";
+            Text = "  ";
+            panel1.ResumeLayout(false);
+            panel1.PerformLayout();
             ResumeLayout(false);
-            PerformLayout();
         }
 
         #endregion
 
-        private TextBox txtUsername;
-        private TextBox txtPassword;
+        private Panel panel1;
         private Button button1;
+        private TextBox txtPassword;
+        private TextBox txtUsername;
     }
 }

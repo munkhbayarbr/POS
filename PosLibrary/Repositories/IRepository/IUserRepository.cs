@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using PosLibrary.Models;
-namespace PosLibrary.Interfaces;
+namespace PosLibrary.Repositories.IRepository;
 
 public interface IUserRepository
 {
-    User?  ValidateUser(string username, string password);
+    Task<User> ValidateUser(string username, string password);
 }
