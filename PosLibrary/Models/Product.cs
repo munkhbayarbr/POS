@@ -17,4 +17,5 @@ public class Product
 
     public decimal Price { get; set; }
     public int Stock { get; set; }
+    public byte[]? ImageData { get; set; }
 }

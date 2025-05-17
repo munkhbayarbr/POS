@@ -6,26 +6,31 @@ using System.Windows.Forms;
 using PosLibrary.Data;
 using PosLibrary.Models;
 using PosLibrary.Repositories.RepositoryImp;
-
+using POSUI.Helper;
 namespace POSUI
 {
-    public partial class MainForm: Form
+    public partial class MainForm : Form
     {
         private readonly User _currentUser;
         private readonly ProductRepository _productRepo;
         private readonly CategoryRepository _categoryRepo;
 
-      
+
         private List<Product> _allProducts = new();
         private List<Category> _allCategories = new();
-        private int _selectedCategoryId = -1; 
+        private int _selectedCategoryId = -1;
 
         public MainForm(User user)
         {
             InitializeComponent();
 
             _currentUser = user;
-
+            if(_currentUser.Role !="Manager")
+            {
+                ProductBtn.Visible = false;
+                CategoryBtn.Visible = false;
+                HelperBtn.Visible = false;
+            }
             _productRepo = new ProductRepository();
             _categoryRepo = new CategoryRepository();
 
@@ -34,6 +39,7 @@ namespace POSUI
 
             LoadCategories();
             ProductFilter(-1);
+
         }
 
         private void timer_run(object sender, EventArgs e)
@@ -123,13 +129,15 @@ namespace POSUI
                     BorderStyle = BorderStyle.FixedSingle,
                     Cursor = Cursors.Hand
                 };
-                //var pic = new PictureBox
-                //{
-                //    Image = Image.FromFile("images/shop.png"),
-                //    SizeMode = PictureBoxSizeMode.Zoom,
-                //    Dock = DockStyle.Top,
-                //    Height = 80
-                //};
+
+                var pic = new PictureBox
+                {
+                    Image = ImageHelper.ByteArrayToImage(prod.ImageData),
+                    SizeMode = PictureBoxSizeMode.Zoom,
+                    Dock = DockStyle.Top,
+                    Height = 80
+                };
+
                 var lbl = new Label
                 {
                     Text = $"{prod.Name}\n${prod.Price:F2}\n{prod.Code}",
@@ -139,12 +147,16 @@ namespace POSUI
                 };
 
                 card.Controls.Add(lbl);
-                //card.Controls.Add(pic);
+                card.Controls.Add(pic); // ⚠️ Add pic BEFORE label to show it at top
+
                 card.Click += (s, e) => AddToCart(prod);
+                pic.Click += (s, e) => AddToCart(prod);
+                lbl.Click += (s, e) => AddToCart(prod);
 
                 flowProducts.Controls.Add(card);
             }
         }
+
 
         private void AddToCart(Product prod)
         {
@@ -158,5 +170,22 @@ namespace POSUI
             profile.ShowDialog();
             Show();
         }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+
+        }
+        private void ProductBtn_Click(object sender, EventArgs e)
+        {
+            using var form = new ManageForm("Product");
+            form.ShowDialog();
+        }
+
+        private void CategoryBtn_Click(object sender, EventArgs e)
+        {
+            using var form = new ManageForm("Category");
+            form.ShowDialog();
+        }
+
     }
 }

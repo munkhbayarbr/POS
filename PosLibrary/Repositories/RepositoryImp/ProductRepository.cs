@@ -49,7 +49,15 @@ namespace PosLibrary.Repositories.RepositoryImp
 
             existingProduct.Name = product.Name;
             existingProduct.Price = product.Price;
+            existingProduct.Stock = product.Stock;
+            existingProduct.Code = product.Code;
             existingProduct.CategoryId = product.CategoryId;
+
+            // ✅ Optional: only update image if provided
+            if (product.ImageData != null && product.ImageData.Length > 0)
+            {
+                existingProduct.ImageData = product.ImageData;
+            }
 
             int result = _context.SaveChanges();
             return result > 0 ? "Амжилттай." : "Амжилтгүй.";

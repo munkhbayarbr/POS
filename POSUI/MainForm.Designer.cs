@@ -42,12 +42,11 @@ partial class MainForm
         label1 = new Label();
         timeArea = new Label();
         panel3 = new Panel();
+        HelperBtn = new Button();
+        CategoryBtn = new Button();
+        ProductBtn = new Button();
         pictureBox1 = new PictureBox();
         timer = new System.Windows.Forms.Timer(components);
-        MenuStrip = new ContextMenuStrip(components);
-        profileToolStripMenuItem = new ToolStripMenuItem();
-        ангилалToolStripMenuItem = new ToolStripMenuItem();
-        тусламжToolStripMenuItem = new ToolStripMenuItem();
         tableLayoutPanel1.SuspendLayout();
         ((ISupportInitialize)gridCart).BeginInit();
         flows.SuspendLayout();
@@ -55,7 +54,6 @@ partial class MainForm
         panel2.SuspendLayout();
         panel3.SuspendLayout();
         ((ISupportInitialize)pictureBox1).BeginInit();
-        MenuStrip.SuspendLayout();
         SuspendLayout();
         // 
         // tableLayoutPanel1
@@ -184,12 +182,44 @@ partial class MainForm
         // 
         // panel3
         // 
+        panel3.Controls.Add(HelperBtn);
+        panel3.Controls.Add(CategoryBtn);
+        panel3.Controls.Add(ProductBtn);
         panel3.Controls.Add(pictureBox1);
         panel3.Dock = DockStyle.Fill;
         panel3.Location = new Point(463, 3);
         panel3.Name = "panel3";
         panel3.Size = new Size(592, 34);
         panel3.TabIndex = 3;
+        // 
+        // HelperBtn
+        // 
+        HelperBtn.Location = new Point(189, 3);
+        HelperBtn.Name = "HelperBtn";
+        HelperBtn.Size = new Size(87, 31);
+        HelperBtn.TabIndex = 5;
+        HelperBtn.Text = "Тусламж";
+        HelperBtn.UseVisualStyleBackColor = true;
+        // 
+        // CategoryBtn
+        // 
+        CategoryBtn.Location = new Point(96, 3);
+        CategoryBtn.Name = "CategoryBtn";
+        CategoryBtn.Size = new Size(87, 31);
+        CategoryBtn.TabIndex = 5;
+        CategoryBtn.Text = "Төрөл";
+        CategoryBtn.UseVisualStyleBackColor = true;
+        CategoryBtn.Click += CategoryBtn_Click;
+        // 
+        // ProductBtn
+        // 
+        ProductBtn.Location = new Point(3, 3);
+        ProductBtn.Name = "ProductBtn";
+        ProductBtn.Size = new Size(87, 31);
+        ProductBtn.TabIndex = 5;
+        ProductBtn.Text = "Бараа";
+        ProductBtn.UseVisualStyleBackColor = true;
+        ProductBtn.Click += ProductBtn_Click;
         // 
         // pictureBox1
         // 
@@ -211,30 +241,6 @@ partial class MainForm
         timer.Interval = 1000;
         timer.Tick += timer_run;
         // 
-        // MenuStrip
-        // 
-        MenuStrip.Items.AddRange(new ToolStripItem[] { profileToolStripMenuItem, ангилалToolStripMenuItem, тусламжToolStripMenuItem });
-        MenuStrip.Name = "Цэс";
-        MenuStrip.Size = new Size(124, 70);
-        // 
-        // profileToolStripMenuItem
-        // 
-        profileToolStripMenuItem.Name = "profileToolStripMenuItem";
-        profileToolStripMenuItem.Size = new Size(123, 22);
-        profileToolStripMenuItem.Text = "Бараа";
-        // 
-        // ангилалToolStripMenuItem
-        // 
-        ангилалToolStripMenuItem.Name = "ангилалToolStripMenuItem";
-        ангилалToolStripMenuItem.Size = new Size(123, 22);
-        ангилалToolStripMenuItem.Text = "Ангилал";
-        // 
-        // тусламжToolStripMenuItem
-        // 
-        тусламжToolStripMenuItem.Name = "тусламжToolStripMenuItem";
-        тусламжToolStripMenuItem.Size = new Size(123, 22);
-        тусламжToolStripMenuItem.Text = "Тусламж";
-        // 
         // MainForm
         // 
         ClientSize = new Size(1058, 498);
@@ -251,7 +257,6 @@ partial class MainForm
         panel2.PerformLayout();
         panel3.ResumeLayout(false);
         ((ISupportInitialize)pictureBox1).EndInit();
-        MenuStrip.ResumeLayout(false);
         ResumeLayout(false);
     }
     #endregion
@@ -268,11 +273,12 @@ partial class MainForm
     private Label timeArea;
     private Label label1;
     private System.Windows.Forms.Timer timer;
-    private ContextMenuStrip MenuStrip;
-    private ToolStripMenuItem profileToolStripMenuItem;
-    private ToolStripMenuItem ангилалToolStripMenuItem;
-    private ToolStripMenuItem тусламжToolStripMenuItem;
+   
     private Panel panel3;
     private PictureBox pictureBox1;
     private FlowLayoutPanel flowCategories;
+    private ToolStripContainer toolStripContainer1;
+    private Button HelperBtn;
+    private Button CategoryBtn;
+    private Button ProductBtn;
 }
