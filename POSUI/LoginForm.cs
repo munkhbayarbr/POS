@@ -4,7 +4,7 @@ using PosLibrary.Models;
 using PosLibrary.Repositories.RepositoryImp;
 namespace POSUI;
 
-public partial class LoginForm : BaseForm
+public partial class LoginForm : Form
 {
     private readonly UserRepository _userRepo;
 

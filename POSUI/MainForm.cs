@@ -30,8 +30,7 @@ namespace POSUI
 
         public MainForm(User user)
         {
-            InitializeComponent();
-            txtCode.KeyDown += txtCode_KeyDown;
+            InitializeComponent()
 
             _currentUser = user;
             if (_currentUser.Role != "Manager")
@@ -40,6 +39,7 @@ namespace POSUI
                 CategoryBtn.Visible = false;
                 HelperBtn.Visible = false;
             }
+
             _productRepo = new ProductRepository();
             _categoryRepo = new CategoryRepository();
 
@@ -51,12 +51,64 @@ namespace POSUI
 
             LoadCategories();
             ProductFilter(-1);
+            txtCode.KeyDown += txtCode_KeyDown;
 
         }
-
-        private void timer_run(object sender, EventArgs e)
+        private void ProductFilter(int filter)
         {
-            timeArea.Text = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+            _selectedCategoryId = filter;
+
+            if (filter >= 0)
+                LoadProducts(_allProducts.Where(p => p.CategoryId == filter).ToList());
+            else
+                LoadProducts(_allProducts);
+
+            HighlightSelectedCategory();
+        }
+
+        private void LoadProducts(List<Product> productList)
+        {
+
+            flowProducts.Controls.Clear();
+
+            foreach (var prod in productList)
+            {
+                var card = new Panel
+                {
+                    Tag = prod,
+                    Width = 120,
+                    Height = 140,
+                    Margin = new Padding(5),
+                    BackColor = Color.White,
+                    BorderStyle = BorderStyle.FixedSingle,
+                    Cursor = Cursors.Hand
+                };
+
+                var pic = new PictureBox
+                {
+                    Image = ImageHelper.ByteArrayToImage(prod.ImageData),
+                    SizeMode = PictureBoxSizeMode.Zoom,
+                    Dock = DockStyle.Top,
+                    Height = 80
+                };
+
+                var lbl = new Label
+                {
+                    Text = $"{prod.Name}\n${prod.Price:F2}\n{prod.Code}",
+                    Dock = DockStyle.Fill,
+                    TextAlign = ContentAlignment.MiddleCenter,
+                    Font = new Font("Segoe UI", 9, FontStyle.Regular)
+                };
+
+                card.Controls.Add(lbl);
+                card.Controls.Add(pic);
+
+                card.Click += (s, e) => AddToCart(prod);
+                pic.Click += (s, e) => AddToCart(prod);
+                lbl.Click += (s, e) => AddToCart(prod);
+
+                flowProducts.Controls.Add(card);
+            }
         }
 
         private void LoadCategories()
@@ -110,63 +162,7 @@ namespace POSUI
                               : Color.Green;
         }
 
-        private void ProductFilter(int filter)
-        {
-            _selectedCategoryId = filter;
-
-            if (filter >= 0)
-                LoadProducts(_allProducts.Where(p => p.CategoryId == filter).ToList());
-            else
-                LoadProducts(_allProducts);
-
-            HighlightSelectedCategory();
-        }
-
-        private void LoadProducts(List<Product> productList)
-        {
-            flowProducts.Controls.Clear();
-
-            foreach (var prod in productList)
-            {
-                var card = new Panel
-                {
-                    Tag = prod,
-                    Width = 120,
-                    Height = 140,
-                    Margin = new Padding(5),
-                    BackColor = Color.White,
-                    BorderStyle = BorderStyle.FixedSingle,
-                    Cursor = Cursors.Hand
-                };
-
-                var pic = new PictureBox
-                {
-                    Image = ImageHelper.ByteArrayToImage(prod.ImageData),
-                    SizeMode = PictureBoxSizeMode.Zoom,
-                    Dock = DockStyle.Top,
-                    Height = 80
-                };
-
-                var lbl = new Label
-                {
-                    Text = $"{prod.Name}\n${prod.Price:F2}\n{prod.Code}",
-                    Dock = DockStyle.Fill,
-                    TextAlign = ContentAlignment.MiddleCenter,
-                    Font = new Font("Segoe UI", 9, FontStyle.Regular)
-                };
-
-                card.Controls.Add(lbl);
-                card.Controls.Add(pic);
-
-                card.Click += (s, e) => AddToCart(prod);
-                pic.Click += (s, e) => AddToCart(prod);
-                lbl.Click += (s, e) => AddToCart(prod);
-
-                flowProducts.Controls.Add(card);
-            }
-        }
-
-
+      
         private void AddToCart(Product prod)
         {
 
@@ -198,7 +194,6 @@ namespace POSUI
 
             UpdateTotal();
         }
-
         private void CartItemChanged(CartItem updatedItem)
         {
             _cartItems = flowCartPanel.Controls
@@ -206,7 +201,6 @@ namespace POSUI
                          .Select(c => c.GetItem())
                          .Where(i => i.Quantity > 0)
                          .ToList();
-
             UpdateTotal();
         }
 
@@ -215,27 +209,12 @@ namespace POSUI
             _totalAmount = _cartItems.Sum(i => i.Total);
             lblTotalAmount.Text = $"Нийт: ₮ {_totalAmount:F0}";
         }
-
-
-
-        private void ShowProfile(object sender, EventArgs e)
-        {
-            Hide();
-            using var profile = new Profile(_currentUser);
-            profile.ShowDialog();
-            Show();
-        }
-
-        private void button3_Click(object sender, EventArgs e)
-        {
-
-        }
+      //PRODUCT CATEGORY vvsgeh tses
         private void ProductBtn_Click(object sender, EventArgs e)
         {
             using var form = new ManageForm("Product");
             form.ShowDialog();
-            LoadCategories();
-            ProductFilter(_selectedCategoryId);
+            LoadProducts(_productRepo.GetProducts());
         }
 
         private void CategoryBtn_Click(object sender, EventArgs e)
@@ -335,7 +314,7 @@ namespace POSUI
             var receipt = _lastReceipt;
             if (receipt == null) return;
 
-            e.Graphics.DrawString("🛒 POS Store", headerFont, brush, 20, y); y += lineHeight;
+            e.Graphics.DrawString("POS system By Muba", headerFont, brush, 20, y); y += lineHeight;
             e.Graphics.DrawString($"Огноо: {receipt.Timestamp:yyyy-MM-dd HH:mm:ss}", normalFont, brush, 20, y); y += lineHeight;
             e.Graphics.DrawString(new string('-', 40), normalFont, brush, 20, y); y += lineHeight;
 
@@ -352,7 +331,7 @@ namespace POSUI
             e.Graphics.DrawString($"Хариулт: ₮ {receipt.Change:F0}", normalFont, brush, 20, y); y += lineHeight;
             e.Graphics.DrawString($"Нийт төлбөр: ₮ {receipt.TotalAmount:F0}", headerFont, brush, 20, y); y += lineHeight + 10;
 
-            e.Graphics.DrawString("📌 Баярлалаа!\nТа дахин үйлчлүүлээрэй.", normalFont, brush, 20, y);
+            e.Graphics.DrawString("📌 Баярлалаа!.", normalFont, brush, 20, y);
         }
         private void btnLastReceipt_Click(object sender, EventArgs e)
         {
@@ -362,9 +341,16 @@ namespace POSUI
                 MessageBox.Show("Сүүлийн баримт байхгүй байна.");
         }
 
-
-
-
-
+        private void timer_run(object sender, EventArgs e)
+        {
+            timeArea.Text = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+        }
+        private void ShowProfile(object sender, EventArgs e)
+        {
+            Hide();
+            using var profile = new Profile(_currentUser);
+            profile.ShowDialog();
+            Show();
+        }
     }
 }
