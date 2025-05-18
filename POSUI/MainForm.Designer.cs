@@ -45,8 +45,11 @@ partial class MainForm
         CategoryBtn = new Button();
         ProductBtn = new Button();
         pictureBox1 = new PictureBox();
-        lblTotalAmount = new Label();
         flowCartPanel = new FlowLayoutPanel();
+        panel4 = new Panel();
+        lastReceipt = new Button();
+        btnPay = new Button();
+        lblTotalAmount = new Label();
         timer = new System.Windows.Forms.Timer(components);
         tableLayoutPanel1.SuspendLayout();
         flows.SuspendLayout();
@@ -54,6 +57,7 @@ partial class MainForm
         panel2.SuspendLayout();
         panel3.SuspendLayout();
         ((ISupportInitialize)pictureBox1).BeginInit();
+        panel4.SuspendLayout();
         SuspendLayout();
         // 
         // tableLayoutPanel1
@@ -64,8 +68,8 @@ partial class MainForm
         tableLayoutPanel1.Controls.Add(flows, 1, 1);
         tableLayoutPanel1.Controls.Add(panel2, 0, 0);
         tableLayoutPanel1.Controls.Add(panel3, 1, 0);
-        tableLayoutPanel1.Controls.Add(lblTotalAmount, 0, 2);
         tableLayoutPanel1.Controls.Add(flowCartPanel, 0, 1);
+        tableLayoutPanel1.Controls.Add(panel4, 0, 2);
         tableLayoutPanel1.Dock = DockStyle.Fill;
         tableLayoutPanel1.Location = new Point(0, 0);
         tableLayoutPanel1.Name = "tableLayoutPanel1";
@@ -228,15 +232,6 @@ partial class MainForm
         pictureBox1.TabStop = false;
         pictureBox1.Click += ShowProfile;
         // 
-        // lblTotalAmount
-        // 
-        lblTotalAmount.AutoSize = true;
-        lblTotalAmount.Location = new Point(3, 398);
-        lblTotalAmount.Name = "lblTotalAmount";
-        lblTotalAmount.Size = new Size(38, 15);
-        lblTotalAmount.TabIndex = 4;
-        lblTotalAmount.Text = "label2";
-        // 
         // flowCartPanel
         // 
         flowCartPanel.AutoScroll = true;
@@ -248,6 +243,46 @@ partial class MainForm
         flowCartPanel.Size = new Size(454, 352);
         flowCartPanel.TabIndex = 5;
         flowCartPanel.WrapContents = false;
+        // 
+        // panel4
+        // 
+        panel4.Controls.Add(lastReceipt);
+        panel4.Controls.Add(btnPay);
+        panel4.Controls.Add(lblTotalAmount);
+        panel4.Dock = DockStyle.Fill;
+        panel4.Location = new Point(3, 401);
+        panel4.Name = "panel4";
+        panel4.Size = new Size(454, 94);
+        panel4.TabIndex = 6;
+        // 
+        // lastReceipt
+        // 
+        lastReceipt.Location = new Point(257, 35);
+        lastReceipt.Name = "lastReceipt";
+        lastReceipt.Size = new Size(60, 34);
+        lastReceipt.TabIndex = 5;
+        lastReceipt.Text = "SS";
+        lastReceipt.UseVisualStyleBackColor = true;
+        lastReceipt.Click += btnLastReceipt_Click;
+        // 
+        // btnPay
+        // 
+        btnPay.Location = new Point(345, 39);
+        btnPay.Name = "btnPay";
+        btnPay.Size = new Size(88, 30);
+        btnPay.TabIndex = 5;
+        btnPay.Text = "Төлөх";
+        btnPay.UseVisualStyleBackColor = true;
+        btnPay.Click += btnPay_Click;
+        // 
+        // lblTotalAmount
+        // 
+        lblTotalAmount.AutoSize = true;
+        lblTotalAmount.Location = new Point(9, 9);
+        lblTotalAmount.Name = "lblTotalAmount";
+        lblTotalAmount.Size = new Size(38, 15);
+        lblTotalAmount.TabIndex = 4;
+        lblTotalAmount.Text = "label2";
         // 
         // timer
         // 
@@ -263,7 +298,6 @@ partial class MainForm
         Text = "MainForm";
         WindowState = FormWindowState.Maximized;
         tableLayoutPanel1.ResumeLayout(false);
-        tableLayoutPanel1.PerformLayout();
         flows.ResumeLayout(false);
         panel1.ResumeLayout(false);
         panel1.PerformLayout();
@@ -271,6 +305,8 @@ partial class MainForm
         panel2.PerformLayout();
         panel3.ResumeLayout(false);
         ((ISupportInitialize)pictureBox1).EndInit();
+        panel4.ResumeLayout(false);
+        panel4.PerformLayout();
         ResumeLayout(false);
     }
     #endregion
@@ -296,4 +332,7 @@ partial class MainForm
     private Button ProductBtn;
     private Label lblTotalAmount;
     private FlowLayoutPanel flowCartPanel;
+    private Panel panel4;
+    private Button btnPay;
+    private Button lastReceipt;
 }

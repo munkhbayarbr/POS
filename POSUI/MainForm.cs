@@ -7,6 +7,8 @@ using PosLibrary.Data;
 using PosLibrary.Models;
 using PosLibrary.Repositories.RepositoryImp;
 using POSUI.Helper;
+using System.Drawing.Printing;
+
 namespace POSUI
 {
     public partial class MainForm : Form
@@ -14,6 +16,8 @@ namespace POSUI
         private readonly User _currentUser;
         private readonly ProductRepository _productRepo;
         private readonly CategoryRepository _categoryRepo;
+        private PrintDocument _printDocument;
+        private Receipt _lastReceipt;
 
 
         private List<Product> _allProducts = new();
@@ -22,6 +26,7 @@ namespace POSUI
 
         private List<CartItem> _cartItems = new();
         private decimal _totalAmount = 0;
+        private decimal _lastReceivedAmount = 0;
 
         public MainForm(User user)
         {
@@ -270,6 +275,96 @@ namespace POSUI
 
             }
         }
+        private void btnPay_Click(object sender, EventArgs e)
+        {
+            if (_cartItems.Count == 0)
+            {
+                MessageBox.Show("Сагсанд бараа алга!", "Анхааруулга");
+                return;
+            }
+
+            using var payForm = new Payment(_totalAmount);
+            if (payForm.ShowDialog() == DialogResult.OK)
+            {
+                var paidAmount = payForm.ReceivedAmount;
+                var change = paidAmount - _totalAmount;
+                _lastReceivedAmount = payForm.ReceivedAmount;
+                MessageBox.Show("Төлбөр амжилттай хийгдлээ!", "Амжилт");
+                _lastReceipt = new Receipt
+                {
+                    Timestamp = DateTime.Now,
+                    Items = _cartItems.Select(c => new CartItem
+                    {
+                        Product = c.Product,
+                        Quantity = c.Quantity
+                    }).ToList(),
+                    TotalAmount = _totalAmount,
+                    PaidAmount = paidAmount,
+                    Change = change
+                };
+                PrintReceipt();
+                flowCartPanel.Controls.Clear();
+                _cartItems.Clear();
+                UpdateTotal();
+                txtCode.Clear();
+            }
+        }
+        private void PrintReceipt()
+        {
+            _printDocument = new PrintDocument();
+            _printDocument.PrintPage += PrintPageHandler;
+
+            var previewDialog = new PrintPreviewDialog
+            {
+                Document = _printDocument,
+                Width = 800,
+                Height = 600
+            };
+
+            previewDialog.ShowDialog();
+        }
+
+        private void PrintPageHandler(object sender, PrintPageEventArgs e)
+        {
+            float y = 20;
+            float lineHeight = 25;
+            Font headerFont = new Font("Consolas", 12, FontStyle.Bold);
+            Font normalFont = new Font("Consolas", 10);
+            Brush brush = Brushes.Black;
+
+            var receipt = _lastReceipt;
+            if (receipt == null) return;
+
+            e.Graphics.DrawString("🛒 POS Store", headerFont, brush, 20, y); y += lineHeight;
+            e.Graphics.DrawString($"Огноо: {receipt.Timestamp:yyyy-MM-dd HH:mm:ss}", normalFont, brush, 20, y); y += lineHeight;
+            e.Graphics.DrawString(new string('-', 40), normalFont, brush, 20, y); y += lineHeight;
+
+            foreach (var item in receipt.Items)
+            {
+                string line = $"{item.Product.Name,-15} x{item.Quantity} ₮{item.Product.Price:F0} = ₮{item.Total:F0}";
+                e.Graphics.DrawString(line, normalFont, brush, 20, y);
+                y += lineHeight;
+            }
+
+            y += 10;
+            e.Graphics.DrawString(new string('-', 40), normalFont, brush, 20, y); y += lineHeight;
+            e.Graphics.DrawString($"Төлсөн: ₮ {receipt.PaidAmount:F0}", normalFont, brush, 20, y); y += lineHeight;
+            e.Graphics.DrawString($"Хариулт: ₮ {receipt.Change:F0}", normalFont, brush, 20, y); y += lineHeight;
+            e.Graphics.DrawString($"Нийт төлбөр: ₮ {receipt.TotalAmount:F0}", headerFont, brush, 20, y); y += lineHeight + 10;
+
+            e.Graphics.DrawString("📌 Баярлалаа!\nТа дахин үйлчлүүлээрэй.", normalFont, brush, 20, y);
+        }
+        private void btnLastReceipt_Click(object sender, EventArgs e)
+        {
+            if (_lastReceipt != null)
+                PrintReceipt();
+            else
+                MessageBox.Show("Сүүлийн баримт байхгүй байна.");
+        }
+
+
+
+
 
     }
 }
