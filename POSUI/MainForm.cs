@@ -26,6 +26,7 @@ namespace POSUI
         public MainForm(User user)
         {
             InitializeComponent();
+            txtCode.KeyDown += txtCode_KeyDown;
 
             _currentUser = user;
             if (_currentUser.Role != "Manager")
@@ -36,6 +37,9 @@ namespace POSUI
             }
             _productRepo = new ProductRepository();
             _categoryRepo = new CategoryRepository();
+
+            _allProducts = _productRepo.GetProducts().ToList();
+            _allCategories = _categoryRepo.GetCategories().ToList();
 
             timer.Tick += timer_run;
             timer.Start();
@@ -105,9 +109,6 @@ namespace POSUI
         {
             _selectedCategoryId = filter;
 
-
-            _allProducts = _productRepo.GetProducts().ToList();
-
             if (filter >= 0)
                 LoadProducts(_allProducts.Where(p => p.CategoryId == filter).ToList());
             else
@@ -163,26 +164,25 @@ namespace POSUI
 
         private void AddToCart(Product prod)
         {
-            // check if product is already in cart
+
             var existing = _cartItems.FirstOrDefault(c => c.Product.Id == prod.Id);
 
             if (existing != null)
             {
                 existing.Quantity++;
 
-                // ✅ find corresponding control and update it
                 foreach (CartItemControl ctrl in flowCartPanel.Controls)
                 {
                     if (ctrl.GetItem().Product.Id == prod.Id)
                     {
-                        ctrl.RefreshUI(); // a method you'll define in the control
+                        ctrl.RefreshUI();
                         break;
                     }
                 }
             }
             else
             {
-                // ✅ create CartItem and CartItemControl
+
                 var newItem = new CartItem { Product = prod, Quantity = 1 };
                 _cartItems.Add(newItem);
 
@@ -241,9 +241,35 @@ namespace POSUI
             ProductFilter(_selectedCategoryId);
         }
 
-        private void tableLayoutPanel1_Paint(object sender, PaintEventArgs e)
-        {
 
+        private void txtCode_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                string code = txtCode.Text.Trim();
+                
+                if (string.IsNullOrEmpty(code))
+                    return;
+
+
+                var matched = _allProducts
+                    .FirstOrDefault(p => p.Code.Equals(code, StringComparison.OrdinalIgnoreCase));
+
+                if (matched != null)
+                {
+                    AddToCart(matched);
+                    txtCode.Clear();
+                }
+                else
+                {
+                    MessageBox.Show("Бараа олдсонгүй!", "Анхааруулга", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    txtCode.Clear();
+                }
+
+                e.Handled = true;
+
+            }
         }
+
     }
 }

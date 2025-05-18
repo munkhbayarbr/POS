@@ -34,7 +34,7 @@ partial class MainForm
         flows = new TableLayoutPanel();
         panel1 = new Panel();
         button1 = new Button();
-        textBox1 = new TextBox();
+        txtCode = new TextBox();
         flowProducts = new FlowLayoutPanel();
         flowCategories = new FlowLayoutPanel();
         panel2 = new Panel();
@@ -75,7 +75,6 @@ partial class MainForm
         tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 100F));
         tableLayoutPanel1.Size = new Size(1058, 498);
         tableLayoutPanel1.TabIndex = 0;
-        tableLayoutPanel1.Paint += tableLayoutPanel1_Paint;
         // 
         // flows
         // 
@@ -97,7 +96,7 @@ partial class MainForm
         // panel1
         // 
         panel1.Controls.Add(button1);
-        panel1.Controls.Add(textBox1);
+        panel1.Controls.Add(txtCode);
         panel1.Dock = DockStyle.Fill;
         panel1.Location = new Point(3, 3);
         panel1.Name = "panel1";
@@ -114,15 +113,16 @@ partial class MainForm
         button1.Text = "🔍";
         button1.UseVisualStyleBackColor = true;
         // 
-        // textBox1
+        // txtCode
         // 
-        textBox1.Dock = DockStyle.Fill;
-        textBox1.Location = new Point(0, 0);
-        textBox1.Margin = new Padding(0);
-        textBox1.Multiline = true;
-        textBox1.Name = "textBox1";
-        textBox1.Size = new Size(586, 34);
-        textBox1.TabIndex = 0;
+        txtCode.Dock = DockStyle.Fill;
+        txtCode.Location = new Point(0, 0);
+        txtCode.Margin = new Padding(0);
+        txtCode.Multiline = true;
+        txtCode.Name = "txtCode";
+        txtCode.PlaceholderText = "Барааны код";
+        txtCode.Size = new Size(586, 34);
+        txtCode.TabIndex = 0;
         // 
         // flowProducts
         // 
@@ -280,7 +280,7 @@ partial class MainForm
     private TableLayoutPanel flows;
     private Panel panel1;
     private Button button1;
-    private TextBox textBox1;
+    private TextBox txtCode;
     private FlowLayoutPanel flowProducts;
     private Panel panel2;
     private Label timeArea;

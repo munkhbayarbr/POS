@@ -125,7 +125,7 @@ namespace POSUI
             cmbCategory.DisplayMember = "Name";
             cmbCategory.ValueMember = "Id";
 
-            // Image picker
+            // Image 
             var picImage = new PictureBox
             {
                 Name = "picImage",
