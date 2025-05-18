@@ -147,7 +147,7 @@ namespace POSUI
                 };
 
                 card.Controls.Add(lbl);
-                card.Controls.Add(pic); // ⚠️ Add pic BEFORE label to show it at top
+                card.Controls.Add(pic); 
 
                 card.Click += (s, e) => AddToCart(prod);
                 pic.Click += (s, e) => AddToCart(prod);
@@ -170,7 +170,7 @@ namespace POSUI
             profile.ShowDialog();
             Show();
         }
-
+            
         private void button3_Click(object sender, EventArgs e)
         {
 
@@ -179,12 +179,16 @@ namespace POSUI
         {
             using var form = new ManageForm("Product");
             form.ShowDialog();
+            LoadCategories();
+            ProductFilter(_selectedCategoryId);
         }
 
         private void CategoryBtn_Click(object sender, EventArgs e)
         {
             using var form = new ManageForm("Category");
             form.ShowDialog();
+            LoadCategories();
+            ProductFilter(_selectedCategoryId);
         }
 
     }

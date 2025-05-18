@@ -148,7 +148,7 @@ namespace POSUI
                 if (ofd.ShowDialog() == DialogResult.OK)
                 {
                     picImage.Image = Image.FromFile(ofd.FileName);
-                    picImage.Tag = ofd.FileName; // store path
+                    picImage.Tag = ofd.FileName; 
                 }
             };
 
@@ -240,7 +240,7 @@ namespace POSUI
                 LoadCategoryGrid();
             }
 
-            // Reset edit state
+            
             _editId = null;
             _isEditMode = false;
 
@@ -306,6 +306,14 @@ namespace POSUI
             }
             else
             {
+                var productRepo = new ProductRepository();
+                var usedCount = productRepo.GetProducts().Count(p => p.CategoryId == id);
+                if (usedCount > 0)
+                {
+                    MessageBox.Show("Энэ ангилалд хамаарах бараа байна.", "Ангиллыг устгах боломжгүй", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
                 var repo = new CategoryRepository();
                 result = repo.DeleteCategory(id);
                 LoadCategoryGrid();
