@@ -10,8 +10,8 @@ using PosLibrary.Data;
 namespace PosLibrary.Migrations
 {
     [DbContext(typeof(Context))]
-    [Migration("20250517103927_UpdatedProductImageSeed")]
-    partial class UpdatedProductImageSeed
+    [Migration("20250518020016_updatedAddProd")]
+    partial class updatedAddProd
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -60,6 +60,9 @@ namespace PosLibrary.Migrations
                     b.Property<int>("CategoryId")
                         .HasColumnType("INTEGER");
 
+                    b.Property<int?>("CategoryId1")
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("Code")
                         .IsRequired()
                         .HasColumnType("TEXT");
@@ -80,6 +83,8 @@ namespace PosLibrary.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("CategoryId");
+
+                    b.HasIndex("CategoryId1");
 
                     b.ToTable("Products");
 
@@ -162,10 +167,14 @@ namespace PosLibrary.Migrations
             modelBuilder.Entity("PosLibrary.Models.Product", b =>
                 {
                     b.HasOne("PosLibrary.Models.Category", "Category")
-                        .WithMany("Products")
+                        .WithMany()
                         .HasForeignKey("CategoryId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+
+                    b.HasOne("PosLibrary.Models.Category", null)
+                        .WithMany("Products")
+                        .HasForeignKey("CategoryId1");
 
                     b.Navigation("Category");
                 });

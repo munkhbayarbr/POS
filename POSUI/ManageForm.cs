@@ -9,20 +9,23 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using PosLibrary.Models;
 using PosLibrary.Repositories.RepositoryImp;
-using PosLibrary.Models;
+
 namespace POSUI
 {
     public partial class ManageForm : Form
     {
-        private readonly string _mode; // "Product" or "Category"
+        private readonly string _mode; // "Product" || "Category"
+        private int? _editId = null;
+        private bool _isEditMode = false;
 
         public ManageForm(string mode)
         {
             InitializeComponent();
             _mode = mode;
             btnSave.Click += btnSave_Click;
-            //btnEdit.Click += btnEdit_Click;
-            //btnDelete.Click += btnDelete_Click;
+            btnEdit.Click += btnEdit_Click;
+            btnDelete.Click += btnDelete_Click;
+
             if (_mode == "Product")
             {
                 LoadProductUI();
@@ -35,24 +38,14 @@ namespace POSUI
             }
         }
 
-        private void ManageForm_Load(object sender, EventArgs e)
-        {
-            if (_mode == "Product")
-            {
-                LoadProductUI();
-                LoadProductGrid();
-            }
-            else
-            {
-                LoadCategoryUI();
-                LoadCategoryGrid();
-            }
-
-        }
         private void LoadProductGrid()
         {
-            var repo = new ProductRepository();
-            var products = repo.GetProducts();
+            var productRepo = new ProductRepository();
+            var categoryRepo = new CategoryRepository();
+
+            var categories = categoryRepo.GetCategories();
+
+            var products = productRepo.GetProducts();
 
             dataGridList.DataSource = products.Select(p => new
             {
@@ -60,9 +53,18 @@ namespace POSUI
                 p.Name,
                 p.Code,
                 p.Price,
-                p.Stock
+                p.Stock,
+                Category = categories.FirstOrDefault(c => c.Id == p.CategoryId)?.Name ?? "Unknown",
+                Image = p.ImageData != null
+                    ? Helper.ImageHelper.ByteArrayToImage(p.ImageData)
+                    : null
             }).ToList();
+
+            dataGridList.RowTemplate.Height = 60;
+            dataGridList.Columns["Image"].DefaultCellStyle.NullValue = null;
+            ((DataGridViewImageColumn)dataGridList.Columns["Image"]).ImageLayout = DataGridViewImageCellLayout.Zoom;
         }
+
 
         private void LoadCategoryGrid()
         {
@@ -81,36 +83,53 @@ namespace POSUI
             pnlDynamic.Controls.Clear();
 
             var lblName = new Label { Text = "Category Name:", Top = 10, Left = 10 };
-            var txtCatName = new TextBox { Name = "txtCategoryName", Top = 10, Left = 120 };
+            var txtCatName = new TextBox { Name = "txtCategoryName", Top = 10, Left = 150 };
 
             pnlDynamic.Controls.Add(lblName);
             pnlDynamic.Controls.Add(txtCatName);
         }
         private void LoadProductUI()
         {
-           pnlDynamic.Controls.Clear();
+            pnlDynamic.Controls.Clear();
 
             // Name
             var lblName = new Label { Text = "Name:", Top = 10, Left = 10 };
-            var txtName = new TextBox { Name = "txtName", Top = 10, Left = 100 };
+            var txtName = new TextBox { Name = "txtName", Top = 10, Left = 150 };
 
             // Barcode
             var lblBarcode = new Label { Text = "Barcode:", Top = 40, Left = 10 };
-            var txtBarcode = new TextBox { Name = "txtBarcode", Top = 40, Left = 100 };
+            var txtBarcode = new TextBox { Name = "txtBarcode", Top = 40, Left = 150 };
 
             // Price
             var lblPrice = new Label { Text = "Price:", Top = 70, Left = 10 };
-            var txtPrice = new TextBox { Name = "txtPrice", Top = 70, Left = 100 };
+            var txtPrice = new TextBox { Name = "txtPrice", Top = 70, Left = 150 };
 
             // Stock
             var lblStock = new Label { Text = "Stock:", Top = 100, Left = 10 };
-            var txtStock = new TextBox { Name = "txtStock", Top = 100, Left = 100 };
+            var txtStock = new TextBox { Name = "txtStock", Top = 100, Left = 150 };
+
+            // Category
+            var lblCategory = new Label { Text = "Category:", Top = 130, Left = 10 };
+            var cmbCategory = new ComboBox
+            {
+                Name = "cmbCategory",
+                Top = 130,
+                Left = 150,
+                Width = 200,
+                DropDownStyle = ComboBoxStyle.DropDownList
+            };
+
+            var catRepo = new CategoryRepository();
+            var categories = catRepo.GetCategories();
+            cmbCategory.DataSource = categories;
+            cmbCategory.DisplayMember = "Name";
+            cmbCategory.ValueMember = "Id";
 
             // Image picker
             var picImage = new PictureBox
             {
                 Name = "picImage",
-                Top = 130,
+                Top = 170,
                 Left = 100,
                 SizeMode = PictureBoxSizeMode.Zoom,
                 BorderStyle = BorderStyle.FixedSingle,
@@ -120,7 +139,7 @@ namespace POSUI
             var btnChooseImage = new Button
             {
                 Text = "Choose Image",
-                Top = 130,
+                Top = 170,
                 Left = 230
             };
             btnChooseImage.Click += (s, e) =>
@@ -137,6 +156,7 @@ namespace POSUI
             {
         lblName, txtName, lblBarcode, txtBarcode,
         lblPrice, txtPrice, lblStock, txtStock,
+          lblCategory, cmbCategory,
         picImage, btnChooseImage
             });
         }
@@ -150,7 +170,8 @@ namespace POSUI
                 var price = Convert.ToDecimal(pnlDynamic.Controls["txtPrice"]?.Text);
                 var stock = Convert.ToInt32(pnlDynamic.Controls["txtStock"]?.Text);
                 var imgControl = pnlDynamic.Controls["picImage"] as PictureBox;
-
+                var cmbCategory = pnlDynamic.Controls["cmbCategory"] as ComboBox;
+                int selectedCategoryId = (int)cmbCategory.SelectedValue;
                 byte[]? imgData = null;
                 if (imgControl?.Image != null)
                 {
@@ -158,26 +179,139 @@ namespace POSUI
                 }
 
                 var repo = new ProductRepository();
-                var result = repo.AddProduct(new Product
+
+                string result;
+                if (_isEditMode && _editId.HasValue)
                 {
-                    Name = name,
-                    Code = barcode,
-                    Price = price,
-                    Stock = stock,
-                    ImageData = imgData,
-                    CategoryId = 1 // hardcoded for now, you can add dropdown later
-                });
+                    result = repo.UpdateProduct(new Product
+                    {
+                        Id = _editId.Value,
+                        Name = name,
+                        Code = barcode,
+                        Price = price,
+                        Stock = stock,
+                        ImageData = imgData,
+                        CategoryId = selectedCategoryId
+                    });
+                }
+                else
+                {
+                    result = repo.AddProduct(new Product
+                    {
+                        Name = name,
+                        Code = barcode,
+                        Price = price,
+                        Stock = stock,
+                        ImageData = imgData,
+                        CategoryId = selectedCategoryId
+                    });
+                }
 
                 MessageBox.Show(result);
+                LoadProductGrid();
+                foreach (Control ctrl in pnlDynamic.Controls)
+                {
+                    if (ctrl is TextBox tb) tb.Text = "";
+                    if (ctrl is ComboBox cb) cb.SelectedIndex = 0;
+                    if (ctrl is PictureBox pb) pb.Image = null;
+                }
+
             }
-            else if (_mode == "Category")
+            else // Category
             {
                 var name = pnlDynamic.Controls["txtCategoryName"]?.Text;
                 var repo = new CategoryRepository();
-                var result = repo.AddCategory(new Category { Name = name });
+
+                string result;
+                if (_isEditMode && _editId.HasValue)
+                {
+                    result = repo.UpdateCategory(new Category
+                    {
+                        Id = _editId.Value,
+                        Name = name
+                    });
+                }
+                else
+                {
+                    result = repo.AddCategory(new Category { Name = name });
+                }
 
                 MessageBox.Show(result);
+                LoadCategoryGrid();
             }
+
+            // Reset edit state
+            _editId = null;
+            _isEditMode = false;
+
+        }
+        private void btnEdit_Click(object sender, EventArgs e)
+        {
+            if (dataGridList.SelectedRows.Count == 0)
+            {
+                MessageBox.Show("Засварлах мөрийг сонгоно уу.");
+                return;
+            }
+
+            _editId = Convert.ToInt32(dataGridList.SelectedRows[0].Cells["Id"].Value);
+            _isEditMode = true;
+
+            if (_mode == "Product")
+            {
+                var repo = new ProductRepository();
+                var product = repo.GetProductById(_editId.Value);
+                if (product == null) return;
+
+                pnlDynamic.Controls["txtName"].Text = product.Name;
+                pnlDynamic.Controls["txtBarcode"].Text = product.Code;
+                pnlDynamic.Controls["txtPrice"].Text = product.Price.ToString();
+                pnlDynamic.Controls["txtStock"].Text = product.Stock.ToString();
+
+                var picImage = pnlDynamic.Controls["picImage"] as PictureBox;
+                picImage.Image = product.ImageData != null
+                    ? Helper.ImageHelper.ByteArrayToImage(product.ImageData)
+                    : null;
+                var cmbCategory = pnlDynamic.Controls["cmbCategory"] as ComboBox;
+                cmbCategory.SelectedValue = product.CategoryId;
+
+            }
+            else // Category
+            {
+                var repo = new CategoryRepository();
+                var category = repo.GetCategoryById(_editId.Value);
+                if (category == null) return;
+
+                pnlDynamic.Controls["txtCategoryName"].Text = category.Name;
+            }
+        }
+        private void btnDelete_Click(object sender, EventArgs e)
+        {
+            if (dataGridList.SelectedRows.Count == 0)
+            {
+                MessageBox.Show("Устгах мөрийг сонгоно уу.");
+                return;
+            }
+
+            var id = Convert.ToInt32(dataGridList.SelectedRows[0].Cells["Id"].Value);
+
+            var confirm = MessageBox.Show("Үнэхээр устгах уу?", "Баталгаажуулах", MessageBoxButtons.YesNo);
+            if (confirm != DialogResult.Yes) return;
+
+            string result;
+            if (_mode == "Product")
+            {
+                var repo = new ProductRepository();
+                result = repo.DeleteProduct(id);
+                LoadProductGrid();
+            }
+            else
+            {
+                var repo = new CategoryRepository();
+                result = repo.DeleteCategory(id);
+                LoadCategoryGrid();
+            }
+
+            MessageBox.Show(result);
         }
 
 

@@ -29,6 +29,8 @@ partial class MainForm
     private void InitializeComponent()
     {
         components = new Container();
+        DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
+        DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
         ComponentResourceManager resources = new ComponentResourceManager(typeof(MainForm));
         tableLayoutPanel1 = new TableLayoutPanel();
         gridCart = new DataGridView();
@@ -77,7 +79,23 @@ partial class MainForm
         // 
         // gridCart
         // 
+        dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleLeft;
+        dataGridViewCellStyle1.BackColor = SystemColors.Control;
+        dataGridViewCellStyle1.Font = new Font("Segoe UI", 9F);
+        dataGridViewCellStyle1.ForeColor = SystemColors.WindowText;
+        dataGridViewCellStyle1.SelectionBackColor = SystemColors.Highlight;
+        dataGridViewCellStyle1.SelectionForeColor = SystemColors.HighlightText;
+        dataGridViewCellStyle1.WrapMode = DataGridViewTriState.True;
+        gridCart.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
         gridCart.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+        dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
+        dataGridViewCellStyle2.BackColor = SystemColors.Window;
+        dataGridViewCellStyle2.Font = new Font("Segoe UI", 9F);
+        dataGridViewCellStyle2.ForeColor = SystemColors.ControlText;
+        dataGridViewCellStyle2.SelectionBackColor = SystemColors.Highlight;
+        dataGridViewCellStyle2.SelectionForeColor = SystemColors.HighlightText;
+        dataGridViewCellStyle2.WrapMode = DataGridViewTriState.False;
+        gridCart.DefaultCellStyle = dataGridViewCellStyle2;
         gridCart.Dock = DockStyle.Fill;
         gridCart.Location = new Point(3, 43);
         gridCart.Name = "gridCart";

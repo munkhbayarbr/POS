@@ -1,2 +1,12 @@
 ﻿dotnet ef migrations add SeedProductsAndUsers --project PosLibrary --startup-project POSUI --context PosLibrary.Data.Context
 dotnet ef database update           --project PosLibrary --startup-project POSUI --context PosLibrary.Data.Context
+# Force‐stop any POSUI.exe processes:
+Stop-Process -Name POSUI -Force
+# Or, if you want to target the exact PID:
+Stop-Process -Id 4072 -Force
+
+# Then rebuild:
+dotnet build
+
+taskkill /IM POSUI.exe /F
+dotnet build
