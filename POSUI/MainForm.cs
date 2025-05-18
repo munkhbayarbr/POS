@@ -20,12 +20,15 @@ namespace POSUI
         private List<Category> _allCategories = new();
         private int _selectedCategoryId = -1;
 
+        private List<CartItem> _cartItems = new();
+        private decimal _totalAmount = 0;
+
         public MainForm(User user)
         {
             InitializeComponent();
 
             _currentUser = user;
-            if(_currentUser.Role !="Manager")
+            if (_currentUser.Role != "Manager")
             {
                 ProductBtn.Visible = false;
                 CategoryBtn.Visible = false;
@@ -147,7 +150,7 @@ namespace POSUI
                 };
 
                 card.Controls.Add(lbl);
-                card.Controls.Add(pic); 
+                card.Controls.Add(pic);
 
                 card.Click += (s, e) => AddToCart(prod);
                 pic.Click += (s, e) => AddToCart(prod);
@@ -160,8 +163,55 @@ namespace POSUI
 
         private void AddToCart(Product prod)
         {
+            // check if product is already in cart
+            var existing = _cartItems.FirstOrDefault(c => c.Product.Id == prod.Id);
 
+            if (existing != null)
+            {
+                existing.Quantity++;
+
+                // ✅ find corresponding control and update it
+                foreach (CartItemControl ctrl in flowCartPanel.Controls)
+                {
+                    if (ctrl.GetItem().Product.Id == prod.Id)
+                    {
+                        ctrl.RefreshUI(); // a method you'll define in the control
+                        break;
+                    }
+                }
+            }
+            else
+            {
+                // ✅ create CartItem and CartItemControl
+                var newItem = new CartItem { Product = prod, Quantity = 1 };
+                _cartItems.Add(newItem);
+
+                var cartCtrl = new CartItemControl(newItem);
+                cartCtrl.OnQuantityChanged += CartItemChanged;
+                flowCartPanel.Controls.Add(cartCtrl);
+            }
+
+            UpdateTotal();
         }
+
+        private void CartItemChanged(CartItem updatedItem)
+        {
+            _cartItems = flowCartPanel.Controls
+                         .OfType<CartItemControl>()
+                         .Select(c => c.GetItem())
+                         .Where(i => i.Quantity > 0)
+                         .ToList();
+
+            UpdateTotal();
+        }
+
+        private void UpdateTotal()
+        {
+            _totalAmount = _cartItems.Sum(i => i.Total);
+            lblTotalAmount.Text = $"Нийт: ₮ {_totalAmount:F0}";
+        }
+
+
 
         private void ShowProfile(object sender, EventArgs e)
         {
@@ -170,7 +220,7 @@ namespace POSUI
             profile.ShowDialog();
             Show();
         }
-            
+
         private void button3_Click(object sender, EventArgs e)
         {
 
@@ -191,5 +241,9 @@ namespace POSUI
             ProductFilter(_selectedCategoryId);
         }
 
+        private void tableLayoutPanel1_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
     }
 }

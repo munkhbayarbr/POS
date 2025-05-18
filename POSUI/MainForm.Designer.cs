@@ -29,11 +29,8 @@ partial class MainForm
     private void InitializeComponent()
     {
         components = new Container();
-        DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
-        DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
         ComponentResourceManager resources = new ComponentResourceManager(typeof(MainForm));
         tableLayoutPanel1 = new TableLayoutPanel();
-        gridCart = new DataGridView();
         flows = new TableLayoutPanel();
         panel1 = new Panel();
         button1 = new Button();
@@ -48,9 +45,10 @@ partial class MainForm
         CategoryBtn = new Button();
         ProductBtn = new Button();
         pictureBox1 = new PictureBox();
+        lblTotalAmount = new Label();
+        flowCartPanel = new FlowLayoutPanel();
         timer = new System.Windows.Forms.Timer(components);
         tableLayoutPanel1.SuspendLayout();
-        ((ISupportInitialize)gridCart).BeginInit();
         flows.SuspendLayout();
         panel1.SuspendLayout();
         panel2.SuspendLayout();
@@ -63,10 +61,11 @@ partial class MainForm
         tableLayoutPanel1.ColumnCount = 2;
         tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 460F));
         tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
-        tableLayoutPanel1.Controls.Add(gridCart, 0, 1);
         tableLayoutPanel1.Controls.Add(flows, 1, 1);
         tableLayoutPanel1.Controls.Add(panel2, 0, 0);
         tableLayoutPanel1.Controls.Add(panel3, 1, 0);
+        tableLayoutPanel1.Controls.Add(lblTotalAmount, 0, 2);
+        tableLayoutPanel1.Controls.Add(flowCartPanel, 0, 1);
         tableLayoutPanel1.Dock = DockStyle.Fill;
         tableLayoutPanel1.Location = new Point(0, 0);
         tableLayoutPanel1.Name = "tableLayoutPanel1";
@@ -76,31 +75,7 @@ partial class MainForm
         tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 100F));
         tableLayoutPanel1.Size = new Size(1058, 498);
         tableLayoutPanel1.TabIndex = 0;
-        // 
-        // gridCart
-        // 
-        dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleLeft;
-        dataGridViewCellStyle1.BackColor = SystemColors.Control;
-        dataGridViewCellStyle1.Font = new Font("Segoe UI", 9F);
-        dataGridViewCellStyle1.ForeColor = SystemColors.WindowText;
-        dataGridViewCellStyle1.SelectionBackColor = SystemColors.Highlight;
-        dataGridViewCellStyle1.SelectionForeColor = SystemColors.HighlightText;
-        dataGridViewCellStyle1.WrapMode = DataGridViewTriState.True;
-        gridCart.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
-        gridCart.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-        dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
-        dataGridViewCellStyle2.BackColor = SystemColors.Window;
-        dataGridViewCellStyle2.Font = new Font("Segoe UI", 9F);
-        dataGridViewCellStyle2.ForeColor = SystemColors.ControlText;
-        dataGridViewCellStyle2.SelectionBackColor = SystemColors.Highlight;
-        dataGridViewCellStyle2.SelectionForeColor = SystemColors.HighlightText;
-        dataGridViewCellStyle2.WrapMode = DataGridViewTriState.False;
-        gridCart.DefaultCellStyle = dataGridViewCellStyle2;
-        gridCart.Dock = DockStyle.Fill;
-        gridCart.Location = new Point(3, 43);
-        gridCart.Name = "gridCart";
-        gridCart.Size = new Size(454, 352);
-        gridCart.TabIndex = 1;
+        tableLayoutPanel1.Paint += tableLayoutPanel1_Paint;
         // 
         // flows
         // 
@@ -253,6 +228,27 @@ partial class MainForm
         pictureBox1.TabStop = false;
         pictureBox1.Click += ShowProfile;
         // 
+        // lblTotalAmount
+        // 
+        lblTotalAmount.AutoSize = true;
+        lblTotalAmount.Location = new Point(3, 398);
+        lblTotalAmount.Name = "lblTotalAmount";
+        lblTotalAmount.Size = new Size(38, 15);
+        lblTotalAmount.TabIndex = 4;
+        lblTotalAmount.Text = "label2";
+        // 
+        // flowCartPanel
+        // 
+        flowCartPanel.AutoScroll = true;
+        flowCartPanel.BorderStyle = BorderStyle.FixedSingle;
+        flowCartPanel.Dock = DockStyle.Fill;
+        flowCartPanel.FlowDirection = FlowDirection.TopDown;
+        flowCartPanel.Location = new Point(3, 43);
+        flowCartPanel.Name = "flowCartPanel";
+        flowCartPanel.Size = new Size(454, 352);
+        flowCartPanel.TabIndex = 5;
+        flowCartPanel.WrapContents = false;
+        // 
         // timer
         // 
         timer.Enabled = true;
@@ -267,7 +263,7 @@ partial class MainForm
         Text = "MainForm";
         WindowState = FormWindowState.Maximized;
         tableLayoutPanel1.ResumeLayout(false);
-        ((ISupportInitialize)gridCart).EndInit();
+        tableLayoutPanel1.PerformLayout();
         flows.ResumeLayout(false);
         panel1.ResumeLayout(false);
         panel1.PerformLayout();
@@ -286,7 +282,6 @@ partial class MainForm
     private Button button1;
     private TextBox textBox1;
     private FlowLayoutPanel flowProducts;
-    private DataGridView gridCart;
     private Panel panel2;
     private Label timeArea;
     private Label label1;
@@ -299,4 +294,6 @@ partial class MainForm
     private Button HelperBtn;
     private Button CategoryBtn;
     private Button ProductBtn;
+    private Label lblTotalAmount;
+    private FlowLayoutPanel flowCartPanel;
 }
