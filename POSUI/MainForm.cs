@@ -8,6 +8,7 @@ using PosLibrary.Models;
 using PosLibrary.Repositories.RepositoryImp;
 using POSUI.Helper;
 using System.Drawing.Printing;
+using Microsoft.EntityFrameworkCore;
 
 namespace POSUI
 {
@@ -27,21 +28,21 @@ namespace POSUI
         private List<CartItem> _cartItems = new();
         private decimal _totalAmount = 0;
         private decimal _lastReceivedAmount = 0;
-
-        public MainForm(User user)
+        private readonly Context _context;
+        public MainForm(User user, Context context)
         {
-            InitializeComponent()
-
+            InitializeComponent();
+            _context = context;
             _currentUser = user;
             if (_currentUser.Role != "Manager")
             {
                 ProductBtn.Visible = false;
                 CategoryBtn.Visible = false;
-                HelperBtn.Visible = false;
+                //HelperBtn.Visible = false;
             }
 
-            _productRepo = new ProductRepository();
-            _categoryRepo = new CategoryRepository();
+            _productRepo = new ProductRepository(context);
+            _categoryRepo = new CategoryRepository(context);
 
             _allProducts = _productRepo.GetProducts().ToList();
             _allCategories = _categoryRepo.GetCategories().ToList();
@@ -212,14 +213,14 @@ namespace POSUI
       //PRODUCT CATEGORY vvsgeh tses
         private void ProductBtn_Click(object sender, EventArgs e)
         {
-            using var form = new ManageForm("Product");
+            using var form = new ManageForm("Product", _context);
             form.ShowDialog();
             LoadProducts(_productRepo.GetProducts());
         }
 
         private void CategoryBtn_Click(object sender, EventArgs e)
         {
-            using var form = new ManageForm("Category");
+            using var form = new ManageForm("Category", _context);
             form.ShowDialog();
             LoadCategories();
             ProductFilter(_selectedCategoryId);

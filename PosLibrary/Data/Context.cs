@@ -1,16 +1,24 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PosLibrary.Models;
+using System.Security.Authentication;
 
 namespace PosLibrary.Data
 {
     public class Context : DbContext
     {
+        public Context() { }
+        public Context(DbContextOptions<Context> options) : base(options) { }
         public DbSet<User> Users { get; set; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<Product> Products { get; set; }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder options)
-            => options.UseSqlite("Data Source=pos.db");
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            if (!optionsBuilder.IsConfigured)
+            {
+                optionsBuilder.UseSqlite("Data Source=pos.db");
+            }
+        }
 
         protected override void OnModelCreating(ModelBuilder mb)
         {

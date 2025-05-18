@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using PosLibrary.Data;
 using PosLibrary.Models;
 using PosLibrary.Repositories.RepositoryImp;
 
@@ -17,10 +18,11 @@ namespace POSUI
         private readonly string _mode; // "Product" || "Category"
         private int? _editId = null;
         private bool _isEditMode = false;
-
-        public ManageForm(string mode)
+        private readonly Context _context;
+        public ManageForm(string mode, Context context)
         {
             InitializeComponent();
+            _context = context;
             _mode = mode;
             btnSave.Click += btnSave_Click;
             btnEdit.Click += btnEdit_Click;
@@ -40,8 +42,8 @@ namespace POSUI
 
         private void LoadProductGrid()
         {
-            var productRepo = new ProductRepository();
-            var categoryRepo = new CategoryRepository();
+            var productRepo = new ProductRepository(_context);
+            var categoryRepo = new CategoryRepository(_context);
 
             var categories = categoryRepo.GetCategories();
 
@@ -68,7 +70,7 @@ namespace POSUI
 
         private void LoadCategoryGrid()
         {
-            var repo = new CategoryRepository();
+            var repo = new CategoryRepository(_context);
             var categories = repo.GetCategories();
 
             dataGridList.DataSource = categories.Select(c => new
@@ -119,7 +121,7 @@ namespace POSUI
                 DropDownStyle = ComboBoxStyle.DropDownList
             };
 
-            var catRepo = new CategoryRepository();
+            var catRepo = new CategoryRepository(_context);
             var categories = catRepo.GetCategories();
             cmbCategory.DataSource = categories;
             cmbCategory.DisplayMember = "Name";
@@ -178,7 +180,7 @@ namespace POSUI
                     imgData = Helper.ImageHelper.ImageToByteArray(imgControl.Image);
                 }
 
-                var repo = new ProductRepository();
+                var repo = new ProductRepository(_context);
 
                 string result;
                 if (_isEditMode && _editId.HasValue)
@@ -220,7 +222,7 @@ namespace POSUI
             else // Category
             {
                 var name = pnlDynamic.Controls["txtCategoryName"]?.Text;
-                var repo = new CategoryRepository();
+                var repo = new CategoryRepository(_context);
 
                 string result;
                 if (_isEditMode && _editId.HasValue)
@@ -258,7 +260,7 @@ namespace POSUI
 
             if (_mode == "Product")
             {
-                var repo = new ProductRepository();
+                var repo = new ProductRepository(_context);
                 var product = repo.GetProductById(_editId.Value);
                 if (product == null) return;
 
@@ -277,7 +279,7 @@ namespace POSUI
             }
             else // Category
             {
-                var repo = new CategoryRepository();
+                var repo = new CategoryRepository(_context);
                 var category = repo.GetCategoryById(_editId.Value);
                 if (category == null) return;
 
@@ -300,13 +302,13 @@ namespace POSUI
             string result;
             if (_mode == "Product")
             {
-                var repo = new ProductRepository();
+                var repo = new ProductRepository(_context);
                 result = repo.DeleteProduct(id);
                 LoadProductGrid();
             }
             else
             {
-                var productRepo = new ProductRepository();
+                var productRepo = new ProductRepository(_context);
                 var usedCount = productRepo.GetProducts().Count(p => p.CategoryId == id);
                 if (usedCount > 0)
                 {
@@ -314,7 +316,7 @@ namespace POSUI
                     return;
                 }
 
-                var repo = new CategoryRepository();
+                var repo = new CategoryRepository(_context);
                 result = repo.DeleteCategory(id);
                 LoadCategoryGrid();
             }

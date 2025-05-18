@@ -4,15 +4,16 @@ using PosLibrary.Models;
 using PosLibrary.Repositories.RepositoryImp;
 namespace POSUI;
 
-public partial class LoginForm : Form
+public partial class LoginForm : BaseForm
 {
     private readonly UserRepository _userRepo;
-
-    public LoginForm()
+    private readonly Context _context;
+    public LoginForm(Context context)
     {
-        InitializeComponent();
 
-        _userRepo = new UserRepository();
+        InitializeComponent();
+        _context = context;
+        _userRepo = new UserRepository(context);
 
     }
     private async void Login(object sender, EventArgs e)
@@ -29,7 +30,7 @@ public partial class LoginForm : Form
                            MessageBoxButtons.OK,
                            MessageBoxIcon.Information);
             Hide();
-            using var main = new MainForm(user);
+            using var main = new MainForm(user, _context);
             main.ShowDialog();
             Close();
         }

@@ -10,16 +10,12 @@ namespace POSUI
         [STAThread]
         static void Main()
         {
+            var context = new Context();
+            context.Database.Migrate();
 
-           
-            using (var db = new Context())
-            {
-               
-                db.Database.Migrate();
-            }
-                
             ApplicationConfiguration.Initialize();
-            Application.Run(new LoginForm());
+            Application.Run(new LoginForm(context));
         }
+
     }
 }

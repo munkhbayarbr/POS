@@ -7,15 +7,16 @@ using PosLibrary.Models;
 using PosLibrary.Data;
 using Microsoft.EntityFrameworkCore;
 using PosLibrary.Repositories.IRepository;
+using Microsoft.Extensions.Options;
 namespace PosLibrary.Repositories.RepositoryImp;
 
 public class UserRepository : IUserRepository
 {
     private readonly Context _context;
     
-    public UserRepository()
+    public UserRepository(Context context)
     {
-        _context = new Context();
+        _context = context;
     }
     public async Task<User> ValidateUser(string username, string password)
     {

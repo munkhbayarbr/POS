@@ -1,4 +1,5 @@
-﻿using PosLibrary.Data;
+﻿using Microsoft.EntityFrameworkCore;
+using PosLibrary.Data;
 using PosLibrary.Models;
 using PosLibrary.Repositories.IRepository;
 using System.Collections.Generic;
@@ -10,9 +11,9 @@ namespace PosLibrary.Repositories.RepositoryImp
     {
         private readonly Context _context;
 
-        public ProductRepository()
+        public ProductRepository(Context context)
         {
-            _context = new Context();
+            _context = context;
         }
 
         public List<Product> GetProducts()

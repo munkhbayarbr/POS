@@ -257,22 +257,24 @@ partial class MainForm
         // 
         // lastReceipt
         // 
-        lastReceipt.Location = new Point(257, 35);
+        lastReceipt.Location = new Point(247, 23);
         lastReceipt.Name = "lastReceipt";
-        lastReceipt.Size = new Size(60, 34);
+        lastReceipt.Size = new Size(68, 46);
         lastReceipt.TabIndex = 5;
-        lastReceipt.Text = "SS";
+        lastReceipt.Text = "Өмнөх receipt";
         lastReceipt.UseVisualStyleBackColor = true;
         lastReceipt.Click += btnLastReceipt_Click;
         // 
         // btnPay
         // 
-        btnPay.Location = new Point(345, 39);
+        btnPay.BackColor = Color.LawnGreen;
+        btnPay.ForeColor = SystemColors.ControlText;
+        btnPay.Location = new Point(341, 23);
         btnPay.Name = "btnPay";
-        btnPay.Size = new Size(88, 30);
+        btnPay.Size = new Size(92, 46);
         btnPay.TabIndex = 5;
         btnPay.Text = "Төлөх";
-        btnPay.UseVisualStyleBackColor = true;
+        btnPay.UseVisualStyleBackColor = false;
         btnPay.Click += btnPay_Click;
         // 
         // lblTotalAmount

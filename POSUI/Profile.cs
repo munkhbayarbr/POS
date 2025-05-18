@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using PosLibrary;
+using PosLibrary.Data;
 using PosLibrary.Models;
 namespace POSUI;
 
@@ -38,7 +39,8 @@ public partial class Profile : Form
               MessageBoxButtons.OK,
               MessageBoxIcon.Information
           );
-        using var login = new LoginForm();
+        var context = new Context();
+        using var login = new LoginForm(context);
         login.ShowDialog();
         Application.Exit();
     }

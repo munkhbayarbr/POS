@@ -11,10 +11,11 @@ namespace PosLibrary.Repositories.RepositoryImp;
 public class CategoryRepository: ICategoryRepository
 {
     private readonly Context _context;
-    public CategoryRepository()
+    public CategoryRepository(Context context)
     {
-        _context = new Context();
+        _context = context;
     }
+
     public List<Category> GetCategories()
     {
         
