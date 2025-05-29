@@ -1,2 +1,1 @@
-dotnet ef migrations add SeedProductsAndUsers --project PosLibrary --startup-project POSUI --context PosLibrary.Data.Context
-dotnet ef database update           --project PosLibrary --startup-project POSUI --context PosLibrary.Data.Context
+
